@@ -1,0 +1,109 @@
+#
+#  ____ _  _ ____ ___  ___  _   _
+#  [__  |\ | |__| |__] |__]  \_/
+#  ___] | \| |  | |    |      |
+#
+#  Snappy AP80 Pro Max full-screen port, v1.3
+#  Original theme: Christian Soffke, CC-BY-SA
+#  Original 240x320 geometry adapted to the complete 360x640 framebuffer.
+#  Horizontal geometry is scaled by 1.5; vertical positions use the full
+#  display while keeping the original type and icon proportions.
+#
+%Fl(2,18-KodeMono-SemiBold.fnt)
+%Fl(3,22-KodeMono-JapaneseHybrid.fnt)
+%Fl(4,33-KodeMono-SemiBold.fnt)
+%Fl(5,44-KodeMono-SemiBold.fnt)
+%Fl(6,33-KodeMono-JapaneseHybrid.fnt)
+%xl(batt,batt_sbs.bmp,84,3,11)
+%xl(batt_chg,batt_sbs_chg.bmp,84,3)
+%xl(vb,vb.bmp)
+%xl(vb_backdrop,vb_backdrop.bmp)
+%xl(vb_too_loud,vb_too_loud.bmp)
+%xl(F,fox.bmp,119,4)
+%?mv(1.5)<%Vd(vol)|%Vd(status)%?Lt<%Vd(title)|%Vd(no_title)>>
+%?if(%cs, =, 21)<%Vd(USB)%VI(USB)|%?mp<%VI(main_l)%Vd(main_l)|%VI(main)%Vd(main)>>
+#
+# ---------
+# Margins
+# ---------
+# t (also displays disk activity)
+%V(0,0,338,30,3)
+%?if(%lh,=,h)<%ar%t(0.5);%ar%t(0.5).;%ar%t(0.5)..;%ar%t(0.5)...|       >
+# l
+%V(0,0,23,640,-)
+# r
+%V(337,0,23,640,-)
+# b (when footer is hidden)
+%Vl(main_l,23,584,315,56,-)
+#
+# ---------
+# Title Area
+# ---------
+# Locked indicator / Time (on Quickscreen) or sleep timer
+%Vl(status,23,30,158,26,3)
+%?mh<%Vs(invert)%acLOCKED|%?if(%cs,!=,10)<%?bs<%bs zzz...>|%?cf<%cH:%cM|%cl:%cM %cP>>>
+#
+# Battery text and icon
+%V(180,30,158,24,3)
+%ar%bl%%%?bp<%xd(batt_chg)|%xd(batt,%bl)>
+#
+# Title
+%Vl(title,23,62,315,52,6)
+%s%al%Lt
+%?if(%Lt,=,Rockbox)<%xd(F)>
+#
+# Line below title
+%Vl(title,23,122,315,23,-)
+%dr(0,3,-,2)
+#
+# When menu has no title
+%Vl(no_title,23,62,315,68,6)
+#
+# Volume (1-100)
+%Vl(vol,23,30,83,47,4)
+%Vs(invert)%ac%?pv<1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|56|57|58|59|60|61|62|63|64|65|66|67|68|69|70|71|72|73|74|75|76|77|78|79|80|81|82|83|84|85|86|87|88|89|90|91|92|93|94|95|96|97|98|99|100|100>
+#
+# Volume bar
+%Vl(vol,23,110,315,27,-)
+%pv(0,0,-,-,vb,backdrop,vb_backdrop)
+%?if(%pv, >, 0)<%pv(0,0,-,-,vb_too_loud,backdrop,vb_backdrop)>
+#
+# ---------
+# UI viewport
+# ---------
+%Vi(main,23,152,315,384,-)
+%Vi(main_l,23,152,315,432,-)
+%Vi(USB,23,152,2,2,-)
+#
+# USB-connected screen
+# Clear hierarchy: state, USB symbol, eject action, and removal instruction.
+%Vl(USB,23,158,315,42,4)
+%acUSB CONNECTED
+%Vl(USB,23,216,315,34,-)
+%dr(0,18,-,2)
+%Vl(USB,23,244,315,50,-)
+%x(u,usb.bmp,141,8)
+# Combined orange action block. The warning is split into two short lines so
+# it remains visible on the AP80's skin renderer.
+%Vl(USB,23,326,315,96,-)
+%dr(0,0,-,-)
+%Vl(USB,23,326,315,48,5)
+%Vs(invert)%acEJECT
+%Vl(USB,23,374,315,24,3)
+%Vs(invert)%acBEFORE
+%Vl(USB,23,398,315,24,3)
+%Vs(invert)%acDISCONNECTING
+#
+# ---------
+# Footer
+# ---------
+%Vl(main,0,536,360,44,-)
+%dr(0,18,-,2)
+#
+%Vl(main,23,580,292,60,3)
+%al%s%?ia<%ia - |>%?it<%it|%fn>
+#
+%Vl(main,315,580,23,60,-)
+# %mp: 0 playing, 1 stopped, 2 paused, 3 fast-forward, 4 rewind
+%?if(%mp,=,2)<%x(p,paused.bmp,9,6)|%?if(%mp,=,0)<%x(q,playing.bmp,9,6)>>
+#
