@@ -1,0 +1,166 @@
+#
+#  ____ _  _ ____ ___  ___  _   _
+#  [__  |\ | |__| |__] |__]  \_/
+#  ___] | \| |  | |    |      |
+#
+#  Snappy AP80 Pro Max full-screen port, v1.3
+#  Original theme: Christian Soffke, CC-BY-SA
+#  Original 240x320 geometry adapted to the complete 360x640 framebuffer.
+#  Horizontal geometry is scaled by 1.5; vertical positions are reflowed
+#  over the full height while album art and type remain undistorted.
+#
+%wd
+%Fl(2,18-KodeMono-SemiBold.fnt)
+%Fl(3,22-KodeMono-JapaneseHybrid.fnt)
+%Fl(4,33-KodeMono-SemiBold.fnt)
+%Fl(5,44-KodeMono-SemiBold.fnt)
+%Fl(6,33-KodeMono-JapaneseHybrid.fnt)
+%xl(B,batt_wps.bmp,2,0,2)
+%xl(O,off_on.bmp,36,0,2)
+%xl(vb,vb.bmp)
+%xl(bb,bb.bmp)
+%xl(vb_backdrop,vb_backdrop.bmp)
+%xl(vb_too_loud,vb_too_loud.bmp)
+%xl(bb_backdrop,bb_backdrop.bmp)
+%xl(pmk,pm_mask.bmp,0,22)
+%xl(tPrev,btn_prev.bmp,58,0,2)
+%xl(tPlay,btn_play.bmp,123,0,4)
+%xl(tNext,btn_next.bmp,198,0,2)
+%xl(tShf,btn_shf.bmp,0,0,4)
+%xl(tRpt,btn_rpt.bmp,263,0,10)
+%xl(pbt_fill,pbt_fill.bmp)
+%xl(pbt_track,pbt_track.bmp)
+%xl(pbt_knob,pbt_knob.bmp)
+%xl(pbt_knob_p,pbt_knob_p.bmp)
+%?C<%Vd(aa)>
+%?mp<|%Vd(pm_fixed)|%Vd(paused)|%Vd(ff)|%Vd(rew)|>
+%?mh<%Vd(locked)|%Vd(volbar)>
+%?bs<%?mv(1.5)<%Vd(voldb)|%Vd(sleep)>|%Vd(voldb)>
+#
+# Header
+# ======
+# Sleep timer
+%Vl(sleep,23,30,83,47,2)
+%Vs(invert)%ac%bs
+%aczzz...
+#
+# Volume (dB)
+%Vl(voldb,23,30,83,47,4)
+%Vs(invert)%ac%pv
+#
+# Shuffle / repeat indicators: a tight pair, centred on the dB box and the
+# battery block so the whole header row shares one centre line (y = 53).
+# Shuffle
+%V(135,34,71,17,2)
+SHF%xd(O,%ps)
+#
+# Repeat
+%V(135,55,71,17,2)
+%?mm<RPT%xd(Ob)|RPT%xd(O)|RP1%xd(O)|RND%xd(O)|A-B%xd(O)>
+#
+# Battery bar
+%V(234,32,104,14,-)
+%bl(0,0,104,14,bb,backdrop,bb_backdrop)
+#
+# Battery percentage
+%V(234,48,104,26,3)
+%Vs(invert)%ac%?bp<%xd(Bb)|%xd(Ba)> %bl%%
+#
+# Volume bar
+%Vl(volbar,23,110,315,27,-)
+%pv(0,0,-,-,vb,backdrop,vb_backdrop)
+%?if(%pv, >, 0)<%pv(0,0,-,-,vb_too_loud,backdrop,vb_backdrop)>
+#
+# Locked
+%Vl(locked,23,106,315,33,4)
+%acLOCKED%Vs(invert)
+#
+# Main
+# ====
+%Vl(aa,23,192,162,162,-)
+%Cl(2,2,159,159,c,c)
+%dr(0,0,162,2)
+%dr(0,161,-,-)
+%dr(0,2,2,159)
+%dr(161,2,-,159)
+%Cd
+#
+# Codec
+%V(248,192,90,36,4)
+%Vs(invert)%ac%fc
+#
+%V(207,233,131,75,2)
+%ar%fb kbps
+%ar%fk kHz
+%ar%?if(%St(party mode),!=,off)<party mode|%?if(%St(single mode),!=,off)<%St(single mode)>>
+#
+# Peak meter
+# One constant-width peak meter prevents the width-change flash when art appears.
+# The firmware draws the meter with the height of the viewport font (48px for
+# font 5): two 22px bars, a 3px gap, all of it aligned with the artwork bottom
+# (y=353). The firmware also paints "scale mark" dots (and the ends of the peak
+# hold markers) in that 3px gap. pm_mask.bmp is drawn after %pm and simply
+# paints the gap in the background colour, which removes the dots while keeping
+# the bars and the end-of-scale line untouched.
+%Vl(pm_fixed,207,307,131,48,5)
+%pm%xd(pmk)
+#
+%Vl(paused,207,307,131,47,5)
+%dr(77,0,21,-)
+%dr(108,0,21,-)
+#
+%Vl(rew,207,307,131,47,5)
+%ar%<%< REW
+#
+%Vl(ff,207,307,131,47,5)
+%ar%>%> FF
+#
+# Footer
+# ======
+# Touch layer. An invisible viewport that owns every touch region of the
+# footer. It has no dynamic content, so it is only drawn once (first in z-order)
+# and never clears what the viewports on top of it draw.
+# Regions are larger than the drawn keys (finger sized), the seek zone covers
+# the progress bar and the time line (y=574..640).
+%V(23,530,315,110,-)
+%T(shf,0,0,55,44,shuffle)
+%T(prv,55,0,65,44,wps_prev)
+%T(prvh,55,0,65,44,rwd,repeat_press)
+%T(ply,120,0,75,44,play)
+%T(nxt,195,0,65,44,wps_next)
+%T(nxth,195,0,65,44,ffwd,repeat_press)
+%T(rpt,260,0,55,44,repmode)
+%T(seek,10,44,295,66,progressbar)
+#
+# Tactile keys: shuffle, previous, play/pause, next, repeat.
+# Raised key = outline + dithered shadow, pressed key sinks onto its shadow.
+# Shuffle/repeat are filled while active. The pressed look is shown for a
+# moment after each tap (%Tl) so the keys answer the finger.
+%V(23,538,315,33,-)
+%?ps<%?Tl(shf,0.3)<%xd(tShf,4)|%xd(tShf,3)>|%?Tl(shf,0.3)<%xd(tShf,2)|%xd(tShf,1)>>
+%?Tl(prv,0.3)<%xd(tPrev,2)|%?Tl(prvh,0.3)<%xd(tPrev,2)|%xd(tPrev,1)>>
+%?mp<%?Tl(ply,0.3)<%xd(tPlay,2)|%xd(tPlay,1)>|%?Tl(ply,0.3)<%xd(tPlay,4)|%xd(tPlay,3)>|%?Tl(ply,0.3)<%xd(tPlay,2)|%xd(tPlay,1)>|%?Tl(ply,0.3)<%xd(tPlay,4)|%xd(tPlay,3)>|%?Tl(ply,0.3)<%xd(tPlay,4)|%xd(tPlay,3)>>
+%?Tl(nxt,0.3)<%xd(tNext,2)|%?Tl(nxth,0.3)<%xd(tNext,2)|%xd(tNext,1)>>
+%?mm<%?Tl(rpt,0.3)<%xd(tRpt,2)|%xd(tRpt,1)>|%?Tl(rpt,0.3)<%xd(tRpt,4)|%xd(tRpt,3)>|%?Tl(rpt,0.3)<%xd(tRpt,6)|%xd(tRpt,5)>|%?Tl(rpt,0.3)<%xd(tRpt,8)|%xd(tRpt,7)>|%?Tl(rpt,0.3)<%xd(tRpt,10)|%xd(tRpt,9)>>
+#
+# Progress bar: 27px tall, solid fill over a dotted groove, raised knob that
+# sinks while it is being dragged. Touch + drag seeking is handled by the
+# "seek" region above (finger sized, knob follows the finger).
+%V(23,580,315,27,-)
+%?Tl(seek,0.4)<%pb(0,0,-,27,pbt_fill,backdrop,pbt_track,slider,pbt_knob_p,notouch)|%pb(0,0,-,27,pbt_fill,backdrop,pbt_track,slider,pbt_knob,notouch)>
+#
+# Track elapsed and position in playlist
+%V(23,612,315,26,3)
+%al%pc/%pt%ar%pp/%pe
+# Album (slot 3: 22px KodeMono/Japanese hybrid)
+%V(23,398,315,38,3)
+%s%al%id
+#
+# Artist (slot 6: 33px KodeMono/Japanese hybrid)
+%V(23,440,315,38,6)
+%s%al%?if(%ig,=,Classical)<%?ic<By %ic - >%ia|%ia>
+#
+# Title (slot 6: 33px KodeMono/Japanese hybrid)
+%V(23,482,315,38,6)
+%al%s%?it<%it|%fn>
+#

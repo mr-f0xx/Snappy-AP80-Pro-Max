@@ -1,0 +1,2 @@
+Rockbox font license notices are included with the upstream Rockbox font bundle.
+The Japanese hybrid fonts also contain glyph bitmaps rendered from Noto Sans Mono CJK JP; see NotoSansCJK-copyright.txt.

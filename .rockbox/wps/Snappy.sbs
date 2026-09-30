@@ -1,0 +1,149 @@
+#
+#  ____ _  _ ____ ___  ___  _   _
+#  [__  |\ | |__| |__] |__]  \_/
+#  ___] | \| |  | |    |      |
+#
+#  Snappy AP80 Pro Max full-screen port, v1.3
+#  Original theme: Christian Soffke, CC-BY-SA
+#  Original 240x320 geometry adapted to the complete 360x640 framebuffer.
+#  Horizontal geometry is scaled by 1.5; vertical positions use the full
+#  display while keeping the original type and icon proportions.
+#
+%Fl(2,18-KodeMono-SemiBold.fnt)
+%Fl(3,22-KodeMono-JapaneseHybrid.fnt)
+%Fl(4,33-KodeMono-SemiBold.fnt)
+%Fl(5,44-KodeMono-SemiBold.fnt)
+%Fl(6,33-KodeMono-JapaneseHybrid.fnt)
+%xl(batt,batt_sbs.bmp,84,3,11)
+%xl(batt_chg,batt_sbs_chg.bmp,84,3)
+%xl(vb,vb.bmp)
+%xl(vb_backdrop,vb_backdrop.bmp)
+%xl(vb_too_loud,vb_too_loud.bmp)
+%xl(F,fox.bmp,119,4)
+%xl(O,off_on.bmp,36,0,2)
+%xl(fPlay,ftr_play.bmp,17,21,4)
+%xl(uGauge,chg_fill.bmp)
+%xl(uGaugeBg,chg_back.bmp)
+%xl(uBig,usb_big.bmp,0,0)
+%?if(%cs, =, 21)<%Vd(USB)%VI(USB)|%?mv(1.5)<%Vd(vol)|%Vd(status)%?Lt<%Vd(title)|%Vd(no_title)>>%Vd(batt)%?mp<%VI(main_l)%Vd(main_l)|%VI(main)%Vd(main)>>
+#
+# ---------
+# Margins
+# ---------
+# t (also displays disk activity)
+%V(0,0,338,30,3)
+%?if(%lh,=,h)<%ar%t(0.5);%ar%t(0.5).;%ar%t(0.5)..;%ar%t(0.5)...|       >
+# l
+%V(0,0,23,640,-)
+# r
+%V(337,0,23,640,-)
+# b (when footer is hidden)
+%Vl(main_l,23,584,315,56,-)
+#
+# ---------
+# Title Area
+# ---------
+# Locked indicator / Time (on Quickscreen) or sleep timer
+%Vl(status,23,30,158,26,3)
+%?mh<%Vs(invert)%acLOCKED|%?if(%cs,!=,10)<%?bs<%bs zzz...>|%?cf<%cH:%cM|%cl:%cM %cP>>>
+#
+# Battery text and icon (hidden on the USB screen, which has its own gauge)
+%Vl(batt,180,30,158,24,3)
+%ar%bl%%%?bp<%xd(batt_chg)|%xd(batt,%bl)>
+#
+# Title
+%Vl(title,23,62,315,52,6)
+%s%al%Lt
+%?if(%Lt,=,Rockbox)<%xd(F)>
+#
+# Line below title
+%Vl(title,23,122,315,23,-)
+%dr(0,3,-,2)
+#
+# When menu has no title
+%Vl(no_title,23,62,315,68,6)
+#
+# Volume (1-100)
+%Vl(vol,23,30,83,47,4)
+%Vs(invert)%ac%?pv<1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|56|57|58|59|60|61|62|63|64|65|66|67|68|69|70|71|72|73|74|75|76|77|78|79|80|81|82|83|84|85|86|87|88|89|90|91|92|93|94|95|96|97|98|99|100|100>
+#
+# Volume bar
+%Vl(vol,23,110,315,27,-)
+%pv(0,0,-,-,vb,backdrop,vb_backdrop)
+%?if(%pv, >, 0)<%pv(0,0,-,-,vb_too_loud,backdrop,vb_backdrop)>
+#
+# ---------
+# UI viewport
+# ---------
+%Vi(main,23,152,315,384,-)
+%Vi(main_l,23,152,315,432,-)
+%Vi(USB,23,152,2,2,-)
+#
+# USB-connected / charging screen
+# Same language as the rest of the theme: inverted tag box, hairline rules,
+# label/value rows, a segmented battery gauge and an inverted action block.
+#
+# Header: tag box + link status
+%Vl(USB,23,30,83,47,4)
+%Vs(invert)%acUSB
+%Vl(USB,118,30,220,47,3)
+%ar%sMASS STORAGE
+%ar%sHOST CONNECTED
+#
+# Rule
+%Vl(USB,23,104,315,4,-)
+%dr(0,0,-,2)
+#
+# Battery: big percentage + charge state, then the segmented gauge
+%Vl(USB,23,136,170,48,5)
+%bl%%
+%Vl(USB,193,136,145,48,3)
+%ar%s%?bc<CHARGING|%?if(%bl,>=,100)<CHARGED|NOT CHARGING>>
+%Vl(USB,23,204,315,40,-)
+%bl(0,0,315,40,uGauge,backdrop,uGaugeBg)
+#
+# Rule
+%Vl(USB,23,268,315,4,-)
+%dr(0,0,-,2)
+#
+# Details (label left, value right)
+%Vl(USB,23,288,315,26,3)
+%alVOLTAGE%ar%bv V
+%Vl(USB,23,326,315,26,3)
+%alMODE%arUSB DISK
+%Vl(USB,23,364,315,26,3)
+%?cc<%alCLOCK%ar%cH:%cM>
+%Vl(USB,23,402,315,26,3)
+%?cc<%alDATE%ar%cY-%cm-%cd>
+#
+# Rule
+%Vl(USB,23,442,315,4,-)
+%dr(0,0,-,2)
+#
+# Eject reminder: big text on the left, big USB icon on the right
+%Vl(USB,23,470,240,48,5)
+%alEJECT
+%Vl(USB,23,524,240,24,3)
+%alBEFORE
+%Vl(USB,23,548,240,24,3)
+%alDISCONNECTING
+%Vl(USB,274,468,64,68,-)
+%xd(uBig)
+#
+# ---------
+# Footer
+# ---------
+%Vl(main,0,536,360,44,-)
+%dr(0,18,-,2)
+#
+# Now playing text
+%Vl(main,23,583,250,24,3)
+%al%s%?ia<%ia - |>%?it<%it|%fn>
+#
+# Play/pause key: a tactile touch button (finger sized touch area).
+# Shows the action you get by pressing it: pause while playing, play while
+# paused, and sinks for a moment after a tap.
+%Vl(main,280,556,80,84,-)
+%T(fplay,0,0,80,84,play)
+%?mp<%?Tl(fplay,0.3)<%xd(fPlay,2)|%xd(fPlay,1)>|%?Tl(fplay,0.3)<%xd(fPlay,2)|%xd(fPlay,1)>|%?Tl(fplay,0.3)<%xd(fPlay,4)|%xd(fPlay,3)>|%?Tl(fplay,0.3)<%xd(fPlay,2)|%xd(fPlay,1)>|%?Tl(fplay,0.3)<%xd(fPlay,2)|%xd(fPlay,1)>>
+#
